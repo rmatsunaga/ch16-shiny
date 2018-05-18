@@ -28,42 +28,32 @@ ui <- fluidPage(
   
   # Include a `sidebarLayout()`
   
+  # The layout's `siderbarPanel()` should have the following control widgets:
+  
+  # A sliderInput labeled "Price (in dollars)". This slider should let the 
+  # user pick a range between the minimum and maximum price of the entire 
+  # diamond data set (e.g., the ranges you stored earlier)
+  
+  # A sliderInput labeled "Carats". This slider should let the user pick a 
+  # range between the minimum and maximum carats of the entire data set
+  
+  # A checkboxInput labeled "Show Trendline". It's default value is TRUE
+  
+  # A slectInput labeled "Facet By", with choices "cut", "clarity" and "color"
+  
   sidebarLayout(
-    
-    # The layout's `siderbarPanel()` should have the following control widgets:
-    
     sidebarPanel(
-      
-      # A sliderInput labeled "Price (in dollars)". This slider should let the 
-      # user pick a range between the minimum and maximum price of the entire 
-      # diamond data set (e.g., the ranges you stored earlier)
-      
-      sliderInput('price_choice', label="Price (in dollars)", min=price_range[1], max=price_range[2], value=price_range),
-      
-      # A sliderInput labeled "Carats". This slider should let the user pick a 
-      # range between the minimum and maximum carats of the entire data set
-      
-      sliderInput('carat_choice', label="Carats", min=carat_range[1], max=carat_range[2], value=carat_range),
-      
-      # A checkboxInput labeled "Show Trendline". It's default value is TRUE
-      
-      checkboxInput('smooth', label=strong("Show Trendline"), value=TRUE),
-      
-      # A slectInput labeled "Facet By", with choices "cut", "clarity" and "color"
-      
-      selectInput('facet_by', label="Facet By", choices=c('cut', 'clarity', 'color'))
+      sliderInput("price_input", label = "Price (in dollars)", min = price_range[1], max = price_range[2], value = price_range),
+      sliderInput("carat_input", label = "Carats", min = carat_range[1], max = carat_range[2], value = carat_range),
+      checkboxInput("trendline", label = "Show Trendline", value=TRUE),
+      selectInput("facet_by", label="Facet By", choices = c("cut", "clarity", "color"))
     ),
     
     # The layout's `mainPanel()` should have the following reactive outputs:
+    # A plotOutput showing the 'plot' output (based on the user specifications)
     
     mainPanel(
-      
-      # A plotOutput showing the 'plot' output (based on the user specifications)
-      
       plotOutput('plot'),
-      
-      # Bonus: a dataTableOutput showing a data table of relevant observations
-      
       dataTableOutput('table')
     )
   )
@@ -80,7 +70,7 @@ server <- function(input, output) {
       filter(price > input$price_choice[1] & price < input$price_choice[2]) %>%
       filter(carat > input$carat_choice[1] & carat < input$carat_choice[2])
     
-    return(data)
+    data
   })
   
   # Assign a reactive `renderPlot()` function to the outputted 'plot' value

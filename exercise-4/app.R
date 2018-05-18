@@ -13,23 +13,19 @@ ui <- fluidPage(
   
   # Output a plot 'milage', and respond to clicks on the plot
   
-  plotOutput('milage', click = "plot_click"),
+  plotOutput("milage", click = "plot_click"),
   
   # Output the word "Highlighting:" followed by a 'selected' text output
   
-  p("Highlighting:",  strong(textOutput('selected', inline=TRUE)) )
+  p("Highlighting:",  textOutput("selected", inline=TRUE))
 )
 
 # Define a server function
+# Create a `reactiveValues()` list to store reactive data values
+# Assign a key 'selected_class' to the reactiveValue with a default value of ""
 
 server <- function(input, output) {
-  
-  # Create a `reactiveValues()` list to store reactive data values
-  
   data <- reactiveValues()
-  
-  # Assign a key 'selected_class' to the reactiveValue with a default value of ""
-  
   data$selected_class <- ""  # assign a default value
   
   # Render the 'milage' plot output
@@ -55,16 +51,12 @@ server <- function(input, output) {
   })
   
   # Use `observeEvent()` to respond to plot clicks
+  # Use `nearPoints()` to get selected rows in the `mpg` data set near to the 
+  # click location
+  # Store `unique()` values from the `class` feature of the selected rows in 
+  # the `selected.class` reactiveValue
   observeEvent(input$plot_click, {
-    
-    # Use `nearPoints()` to get selected rows in the `mpg` data set near to the 
-    # click location
-    
     selected <- nearPoints(mpg, input$plot_click)
-    
-    # Store `unique()` values from the `class` feature of the selected rows in 
-    # the `selected.class` reactiveValue
-    
     data$selected_class <- unique(selected$class)
   })
   
